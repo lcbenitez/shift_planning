@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Vista Tree -->
+	<record id="view_shift_assignment_tree" model="ir.ui.view">
+		<field name="name">work.shift.assignment.tree</field>
+		<field name="model">work.shift.assignment</field>
+		<field name="arch" type="xml">
+			<tree decoration-info="status == 'confirmed'"
+                  decoration-success="status == 'present'"
+                  decoration-danger="status == 'absent'"
+                  decoration-warning="status == 'replaced'"
+                  decoration-muted="status == 'cancelled'">
+				<field name="shift_date"/>
+				<field name="shift_hours"/>
+				<field name="shift_id"/>
+				<field name="employee_id"/>
+				<field name="employee_email"/>
+				<field name="shift_role"/>
+				<field name="branch_id"/>
+				<field name="status"/>
+				<field name="notification_sent"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- Vista Form -->
+	<record id="view_shift_assignment_form" model="ir.ui.view">
+		<field name="name">work.shift.assignment.form</field>
+		<field name="model">work.shift.assignment</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="action_confirm_assignment" string="Confirmar Asignación"
+                            type="object" class="btn-primary"
+                            invisible="status != 'assigned'"/>
+					<button name="action_send_notification" string="Enviar Notificación"
+                            type="object" class="btn-info"
+                            invisible="not employee_email"/>
+					<button name="action_mark_present" string="Marcar Presente"
+                            type="object" class="btn-success"
+                            invisible="status == 'present'"/>
+					<button name="action_mark_absent" string="Marcar Ausente"
+                            type="object" class="btn-danger"
+                            invisible="status == 'absent'"/>
+					<button name="action_mark_replaced" string="Marcar Reemplazado"
+                            type="object" class="btn-warning"
+                            invisible="status == 'replaced'"/>
+					<button name="action_cancel_assignment" string="Cancelar"
+                            type="object" class="btn-secondary"
+                            invisible="status in ['cancelled', 'present']"/>
+					<field name="status" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="action_resend_notification" type="object"
+                                class="oe_stat_button" icon="fa-envelope"
+                                invisible="not notification_sent">
+							<div class="o_field_widget o_stat_info">
+								<span class="o_stat_text">Reenviar</span>
+								<span class="o_stat_text">Notificación</span>
+							</div>
+						</button>
+					</div>
+					<group>
+						<group>
+							<field name="shift_id"/>
+							<field name="employee_id"/>
+							<field name="employee_email"/>
+							<field name="shift_date"/>
+						</group>
+						<group>
+							<field name="shift_hours"/>
+							<field name="shift_role"/>
+							<field name="branch_id"/>
+							<field name="notification_sent"/>
+							<field name="confirmed_date" invisible="not confirmed_date"/>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Vista Search -->
+	<record id="view_shift_assignment_search" model="ir.ui.view">
+		<field name="name">work.shift.assignment.search</field>
+		<field name="model">work.shift.assignment</field>
+		<field name="arch" type="xml">
+			<search>
+				<field name="employee_id"/>
+				<field name="shift_id"/>
+				<field name="branch_id"/>
+				<field name="shift_role"/>
+				<filter name="assigned" string="Asignados" domain="[('status', '=', 'assigned')]"/>
+				<filter name="confirmed" string="Confirmados" domain="[('status', '=', 'confirmed')]"/>
+				<filter name="present" string="Presentes" domain="[('status', '=', 'present')]"/>
+				<filter name="absent" string="Ausentes" domain="[('status', '=', 'absent')]"/>
+				<filter name="cancelled" string="Cancelados" domain="[('status', '=', 'cancelled')]"/>
+				<separator/>
+				<filter name="notification_sent" string="Notificación Enviada" domain="[('notification_sent', '=', True)]"/>
+				<filter name="no_notification" string="Sin Notificación" domain="[('notification_sent', '=', False)]"/>
+				<filter name="no_email" string="Sin Email" domain="[('employee_email', '=', False)]"/>
+				<separator/>
+				<filter name="today" string="Hoy" domain="[('shift_date', '=', context_today())]"/>
+				<filter name="this_week" string="Esta Semana"
+                        domain="[('shift_date', '&gt;=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+				<group expand="0" string="Group By">
+					<filter name="group_by_employee" string="Empleado" context="{'group_by': 'employee_id'}"/>
+					<filter name="group_by_branch" string="Sucursal" context="{'group_by': 'branch_id'}"/>
+					<filter name="group_by_status" string="Estado" context="{'group_by': 'status'}"/>
+					<filter name="group_by_date" string="Fecha" context="{'group_by': 'shift_date'}"/>
+				</group>
+			</search>
+		</field>
+	</record>
+
+	<!-- Acción -->
+	<record id="action_shift_assignment" model="ir.actions.act_window">
+		<field name="name">Asignaciones</field>
+		<field name="res_model">work.shift.assignment</field>
+		<field name="view_mode">tree,form</field>
+		<field name="search_view_id" ref="view_shift_assignment_search"/>
+	</record>
+
+	<!-- Submenú -->
+	<menuitem id="menu_shift_assignment"
+              name="Asignaciones"
+              parent="menu_shift_planning_root"
+              action="action_shift_assignment"/>
+</odoo>

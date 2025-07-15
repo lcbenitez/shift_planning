@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cron Job para marcar asistencias automáticamente -->
+    <record id="cron_auto_mark_attendance" model="ir.cron">
+        <field name="name">Auto Mark Shift Attendance</field>
+        <field name="model_id" ref="model_work_shift_schedule"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_auto_mark_attendance()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+</odoo>

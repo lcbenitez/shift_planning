@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Vista Tree -->
+	<record id="view_shift_schedule_tree" model="ir.ui.view">
+		<field name="name">work.shift.schedule.tree</field>
+		<field name="model">work.shift.schedule</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="date"/>
+				<field name="hour_start" widget="float_time"/>
+				<field name="hour_end" widget="float_time"/>
+				<field name="branch_id"/>
+				<field name="role"/>
+				<field name="quantity_required"/>
+				<field name="assigned_count"/>
+				<field name="remaining_slots"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- Vista Form -->
+	<record id="view_shift_schedule_form" model="ir.ui.view">
+		<field name="name">work.shift.schedule.form</field>
+		<field name="model">work.shift.schedule</field>
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="action_confirm_all_assignments" string="Confirmar Todas"
+                            type="object" class="btn-primary"
+                            invisible="state == 'done'"/>
+					<button name="action_send_all_notifications" string="Enviar Notificaciones"
+                            type="object" class="btn-info"
+                            invisible="state == 'done'"/>
+					<button name="action_mark_all_present" string="Marcar Todos Presentes"
+                            type="object" class="btn-success"
+                            invisible="state == 'done'"/>
+					<button name="action_clear_all_assignments" string="Eliminar Todas"
+                            type="object" class="btn-danger"
+                            invisible="state == 'done'"
+                            confirm="¿Está seguro de eliminar todas las asignaciones?"/>
+					<field name="state" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_title">
+						<div class="alert alert-success" role="alert" invisible="not is_complete">
+							<strong>✓ Turno Completo:</strong> Todos los espacios han sido asignados.
+						</div>
+						<div class="alert alert-warning" role="alert" invisible="remaining_slots &lt;= 0">
+							<strong>⚠ Espacios Disponibles:</strong> <field name="remaining_slots"/> empleados por asignar.
+						</div>
+					</div>
+					<group>
+						<group>
+							<field name="date"/>
+							<field name="hour_start" widget="float_time"/>
+							<field name="hour_end" widget="float_time"/>
+						</group>
+						<group>
+							<field name="branch_id"/>
+							<field name="role"/>
+							<field name="quantity_required"/>
+							<field name="assigned_count"/>
+							<field name="remaining_slots"/>
+							<field name="is_complete"/>
+						</group>
+					</group>
+					<notebook>
+						<page string="Asignaciones">
+							<field name="assignment_ids">
+								<tree editable="bottom" decoration-info="status == 'confirmed'"
+                                      decoration-success="status == 'present'"
+                                      decoration-danger="status == 'absent'"
+                                      decoration-warning="status == 'replaced'"
+                                      decoration-muted="status == 'cancelled'">
+									<field name="employee_id"/>
+									<field name="employee_email"/>
+									<field name="status"/>
+									<field name="notification_sent"/>
+									<button name="action_confirm_assignment" string="✓" type="object"
+                                            class="btn-primary btn-sm" title="Confirmar Asignación"
+                                            invisible="status != 'assigned'"/>
+									<button name="action_send_notification" string="📧" type="object"
+                                            class="btn-info btn-sm" title="Enviar Notificación"
+                                            invisible="not employee_email or notification_sent"/>
+									<button name="action_mark_present" string="✓" type="object"
+                                            class="btn-success btn-sm" title="Marcar Presente"
+                                            invisible="status == 'present'"/>
+									<button name="action_cancel_assignment" string="✖" type="object"
+                                            class="btn-secondary btn-sm" title="Cancelar Asignación"
+                                            invisible="status in ['cancelled', 'present']"/>
+								</tree>
+							</field>
+						</page>
+					</notebook>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Acción -->
+	<record id="action_shift_schedule" model="ir.actions.act_window">
+		<field name="name">Turnos Programados</field>
+		<field name="res_model">work.shift.schedule</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<!-- Menú Principal -->
+	<menuitem id="menu_shift_planning_root" name="Turnos" sequence="10"/>
+
+	<!-- Submenú -->
+	<menuitem id="menu_shift_schedule"
+              name="Programación Esperada"
+              parent="menu_shift_planning_root"
+              action="action_shift_schedule"/>
+</odoo>
