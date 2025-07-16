@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Vista Form del Wizard de Asignación Automática -->
+	<record id="view_shift_auto_assign_wizard_form" model="ir.ui.view">
+		<field name="name">shift.auto.assign.wizard.form</field>
+		<field name="model">shift.auto.assign.wizard</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<h1>Asignación Automática de Turnos</h1>
+					</div>
+
+					<!-- Mostrar resultados si ya se ejecutó -->
+					<div class="alert alert-success" role="alert" invisible="not assigned_count">
+						<strong>✓ Asignación Completada</strong>
+						<br/>
+						<span>
+							Turnos asignados: <field name="assigned_count" readonly="1"/>
+						</span>
+						<br/>
+						<span>
+							Turnos no asignados: <field name="failed_count" readonly="1"/>
+						</span>
+					</div>
+
+					<div class="alert alert-info" role="alert" invisible="context.get('show_results', False)">
+						<strong>Información:</strong>
+						<span>
+							Turnos a asignar: <field name="shifts_to_assign" readonly="1"/>
+						</span>
+					</div>
+
+					<group invisible="context.get('show_results', False)">
+						<group string="Período">
+							<field name="date_from"/>
+							<field name="date_to"/>
+						</group>
+
+						<group string="Filtros">
+							<field name="branch_ids" widget="many2many_tags"/>
+							<field name="assignment_mode"/>
+						</group>
+					</group>
+
+					<group string="Opciones" invisible="context.get('show_results', False)">
+						<field name="use_preferences"/>
+					</group>
+
+					<!-- Log de resultados -->
+					<group string="Detalles de Asignación" invisible="not assignment_log">
+						<field name="assignment_log" nolabel="1" readonly="1"/>
+					</group>
+				</sheet>
+
+				<footer>
+					<button name="action_assign_shifts" string="Asignar Turnos"
+                            type="object" class="btn-primary"
+                            invisible="context.get('show_results', False)"/>
+					<button name="action_view_assigned_shifts" string="Ver Asignaciones"
+                            type="object" class="btn-success"
+                            invisible="not assigned_count"/>
+					<button string="Cerrar" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!-- Acción para el Wizard -->
+	<record id="action_shift_auto_assign_wizard" model="ir.actions.act_window">
+		<field name="name">Asignación Automática</field>
+		<field name="res_model">shift.auto.assign.wizard</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<!-- Menú -->
+	<menuitem id="menu_shift_auto_assign"
+              name="Asignación Automática"
+              parent="menu_shift_planning_root"
+              action="action_shift_auto_assign_wizard"
+              sequence="35"/>
+</odoo>
