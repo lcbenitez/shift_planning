@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Vista Form para Reportes -->
+	<record id="view_shift_branch_report_form" model="ir.ui.view">
+		<field name="name">shift.branch.report.form</field>
+		<field name="model">shift.branch.report</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<h1>Generar Reporte de Turnos</h1>
+					</div>
+
+					<group>
+						<group string="Período del Reporte">
+							<field name="date_from"/>
+							<field name="date_to"/>
+							<field name="report_type"/>
+						</group>
+
+						<group string="Filtros">
+							<field name="branch_ids" widget="many2many_tags"/>
+						</group>
+					</group>
+				</sheet>
+
+				<footer>
+					<button name="action_generate_report" string="Generar Reporte"
+                            type="object" class="btn-primary"/>
+					<button name="action_export_excel" string="Exportar Excel"
+                            type="object" class="btn-info"/>
+					<button string="Cancelar" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!-- Acción para el Wizard de Reportes -->
+	<record id="action_shift_branch_report" model="ir.actions.act_window">
+		<field name="name">Reportes de Turnos</field>
+		<field name="res_model">shift.branch.report</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<!-- Menú de Reportes -->
+	<menuitem id="menu_shift_reports"
+              name="Reportes"
+              parent="menu_shift_planning_root"
+              action="action_shift_branch_report"
+              sequence="40"/>
+</odoo>
