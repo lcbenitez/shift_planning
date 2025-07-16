@@ -1,4 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_work_role_user,access_work_role_user,model_work_role,,1,1,1,1
 access_work_shift_schedule_user,access_work_shift_schedule_user,model_work_shift_schedule,,1,1,1,1
 access_work_shift_assignment_user,access_work_shift_assignment_user,model_work_shift_assignment,,1,1,1,1
 access_shift_branch_report_user,access_shift_branch_report_user,model_shift_branch_report,,1,1,1,1
