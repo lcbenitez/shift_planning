@@ -33,6 +33,46 @@ class ShiftDashboard(models.Model):
         # Esta vista no necesita tabla física
         pass
 
+    def action_new_shift(self):
+        """Crear nuevo turno"""
+        return {
+            'name': 'Nuevo Turno',
+            'type': 'ir.actions.act_window',
+            'res_model': 'work.shift.schedule',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_auto_assign(self):
+        """Abrir asignación automática"""
+        return {
+            'name': 'Asignación Automática',
+            'type': 'ir.actions.act_window',
+            'res_model': 'shift.auto.assign.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_generate_report(self):
+        """Generar reporte"""
+        return {
+            'name': 'Generar Reporte',
+            'type': 'ir.actions.act_window',
+            'res_model': 'shift.branch.report',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    def action_open_config(self):
+        """Abrir configuración"""
+        return {
+            'name': 'Configuración de Turnos',
+            'type': 'ir.actions.act_window',
+            'res_model': 'shift.planning.config',
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
     @api.model
     def get_dashboard_data(self):
         """Obtener datos del dashboard"""
@@ -180,141 +220,3 @@ class ShiftDashboard(models.Model):
         
         return (shift1.hour_start < shift2.hour_end and 
                 shift1.hour_end > shift2.hour_start)
-
-    @api.model
-    def get_chart_data(self):
-        """Obtener datos para gráficos"""
-        # Datos para gráfico de asistencia semanal
-        today = date.today()
-        dates = []
-        attendance_data = []
-        
-        for i in range(7):
-            check_date = today - timedelta(days=6-i)
-            dates.append(check_date.strftime('%a %d'))
-            
-            day_assignments = self.env['work.shift.assignment'].search([
-                ('shift_date', '=', check_date)
-            ])
-            
-            if day_assignments:
-                attendance_rate = self._calculate_attendance_rate(day_assignments)
-                attendance_data.append(attendance_rate)
-            else:
-                attendance_data.append(0)
-        
-        # Datos para gráfico de cobertura por sucursal
-        branches = self.env['res.partner'].search([('is_company', '=', True)])
-        branch_data = []
-        
-        for branch in branches:
-            branch_shifts = self.env['work.shift.schedule'].search([
-                ('branch_id', '=', branch.id),
-                ('date', '>=', today - timedelta(days=30)),
-                ('date', '<=', today)
-            ])
-            
-            if branch_shifts:
-                total_required = sum(shift.quantity_required for shift in branch_shifts)
-                total_assigned = sum(shift.assigned_count for shift in branch_shifts)
-                coverage = (total_assigned / total_required) * 100 if total_required > 0 else 0
-                
-                branch_data.append({
-                    'name': branch.name,
-                    'coverage': coverage,
-                    'shifts': len(branch_shifts)
-                })
-        
-        # Datos para gráfico de roles más demandados
-        role_data = []
-        roles = self.env['work.shift.schedule'].read_group(
-            [('date', '>=', today - timedelta(days=30))],
-            ['role'],
-            ['role']
-        )
-        
-        for role_group in roles:
-            role_shifts = self.env['work.shift.schedule'].search([
-                ('role', '=', role_group['role']),
-                ('date', '>=', today - timedelta(days=30))
-            ])
-            
-            total_required = sum(shift.quantity_required for shift in role_shifts)
-            role_data.append({
-                'role': role_group['role'],
-                'demand': total_required,
-                'shifts_count': len(role_shifts)
-            })
-        
-        role_data.sort(key=lambda x: x['demand'], reverse=True)
-        
-        return {
-            'attendance_trend': {
-                'dates': dates,
-                'data': attendance_data
-            },
-            'branch_coverage': branch_data,
-            'role_demand': role_data[:10]  # Top 10 roles
-        }
-
-    @api.model
-    def get_upcoming_shifts(self, limit=10):
-        """Obtener próximos turnos"""
-        upcoming = self.env['work.shift.schedule'].search([
-            ('date', '>=', date.today()),
-            ('state', '=', 'planned')
-        ], order='date asc, hour_start asc', limit=limit)
-        
-        return [{
-            'id': shift.id,
-            'date': shift.date,
-            'time': f"{shift.hour_start:.1f}-{shift.hour_end:.1f}",
-            'role': shift.role,
-            'branch': shift.branch_id.name,
-            'assigned': shift.assigned_count,
-            'required': shift.quantity_required,
-            'is_complete': shift.is_complete,
-            'status': shift.state
-        } for shift in upcoming]
-
-    @api.model
-    def get_employee_performance(self, limit=10):
-        """Obtener rendimiento de empleados"""
-        # Calcular métricas de los últimos 30 días
-        date_from = date.today() - timedelta(days=30)
-        
-        employees = self.env['hr.employee'].search([('active', '=', True)])
-        performance_data = []
-        
-        for employee in employees:
-            assignments = self.env['work.shift.assignment'].search([
-                ('employee_id', '=', employee.id),
-                ('shift_date', '>=', date_from)
-            ])
-            
-            if assignments:
-                total_assignments = len(assignments)
-                present_count = len(assignments.filtered(lambda a: a.status == 'present'))
-                absent_count = len(assignments.filtered(lambda a: a.status == 'absent'))
-                
-                attendance_rate = (present_count / total_assignments) * 100 if total_assignments > 0 else 0
-                
-                # Calcular horas trabajadas
-                total_hours = sum(
-                    a.shift_id.hour_end - a.shift_id.hour_start 
-                    for a in assignments.filtered(lambda a: a.status == 'present' and a.shift_id)
-                )
-                
-                performance_data.append({
-                    'employee': employee.name,
-                    'total_shifts': total_assignments,
-                    'attendance_rate': attendance_rate,
-                    'total_hours': total_hours,
-                    'absent_count': absent_count,
-                    'score': attendance_rate + (total_hours / 10)  # Puntaje simple
-                })
-        
-        # Ordenar por puntaje
-        performance_data.sort(key=lambda x: x['score'], reverse=True)
-        
-        return performance_data[:limit]

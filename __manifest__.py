@@ -47,9 +47,7 @@
         'base', 
         'hr', 
         'hr_skills', 
-        'mail',
-        'web',
-        'web_dashboard'
+        'mail'
     ],
     'external_dependencies': {
         'python': ['xlsxwriter'],
@@ -68,29 +66,17 @@
         'views/work_shift_assignment_views.xml',
         
         # Nuevas vistas avanzadas
-        'views/shift_config_views.xml',
+        'views/shift_config_view.xml',
         'views/employee_preferences_views.xml',
-        'views/shift_dashboard_views.xml',
-        
-        # Reportes
+        'views/shift_dashboard_view.xml',
         'views/shift_reports_views.xml',
     ],
-    'assets': {
-        'web.assets_backend': [
-            'shift_planning/static/src/js/dashboard.js',
-            'shift_planning/static/src/css/dashboard.css',
-        ],
-    },
     'demo': [
-        'demo/shift_demo_data.xml',
+        'demo/demo_data.xml',
     ],
     'installable': True,
     'application': True,
     'auto_install': False,
     'license': 'LGPL-3',
     'sequence': 100,
-    'images': ['static/description/banner.png'],
-    'price': 99.99,
-    'currency': 'USD',
-    'live_test_url': 'https://demo.tuempresa.com',
 }

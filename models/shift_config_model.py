@@ -5,7 +5,6 @@ from odoo import models, fields, api
 class ShiftPlanningConfig(models.TransientModel):
     _name = 'shift.planning.config'
     _description = 'Configuración de Planificación de Turnos'
-    _inherit = 'res.config.settings'
 
     # Configuraciones de notificaciones
     notification_advance_hours = fields.Integer(
@@ -90,11 +89,13 @@ class ShiftPlanningConfig(models.TransientModel):
         default=False,
         help="Aplicar penalizaciones por ausencias injustificadas"
     )
-    
+
     @api.model
-    def get_values(self):
-        res = super().get_values()
+    def default_get(self, fields_list):
+        """Cargar valores desde parámetros de configuración"""
+        res = super().default_get(fields_list)
         ICPSudo = self.env['ir.config_parameter'].sudo()
+        
         res.update({
             'notification_advance_hours': int(ICPSudo.get_param('shift_planning.notification_advance_hours', 24)),
             'reminder_hours': int(ICPSudo.get_param('shift_planning.reminder_hours', 2)),
@@ -103,18 +104,20 @@ class ShiftPlanningConfig(models.TransientModel):
             'max_shift_duration': float(ICPSudo.get_param('shift_planning.max_shift_duration', 12.0)),
             'max_daily_hours': float(ICPSudo.get_param('shift_planning.max_daily_hours', 8.0)),
             'min_rest_between_shifts': float(ICPSudo.get_param('shift_planning.min_rest_between_shifts', 8.0)),
-            'auto_assign_enabled': ICPSudo.get_param('shift_planning.auto_assign_enabled', False),
-            'prefer_skills_match': ICPSudo.get_param('shift_planning.prefer_skills_match', True),
-            'consider_employee_preferences': ICPSudo.get_param('shift_planning.consider_employee_preferences', True),
+            'auto_assign_enabled': ICPSudo.get_param('shift_planning.auto_assign_enabled', 'False') == 'True',
+            'prefer_skills_match': ICPSudo.get_param('shift_planning.prefer_skills_match', 'True') == 'True',
+            'consider_employee_preferences': ICPSudo.get_param('shift_planning.consider_employee_preferences', 'True') == 'True',
             'default_report_period': ICPSudo.get_param('shift_planning.default_report_period', 'weekly'),
-            'require_manager_approval': ICPSudo.get_param('shift_planning.require_manager_approval', False),
-            'enable_attendance_penalties': ICPSudo.get_param('shift_planning.enable_attendance_penalties', False),
+            'require_manager_approval': ICPSudo.get_param('shift_planning.require_manager_approval', 'False') == 'True',
+            'enable_attendance_penalties': ICPSudo.get_param('shift_planning.enable_attendance_penalties', 'False') == 'True',
         })
+        
         return res
 
-    def set_values(self):
-        super().set_values()
+    def action_save_config(self):
+        """Guardar configuraciones como parámetros del sistema"""
         ICPSudo = self.env['ir.config_parameter'].sudo()
+        
         ICPSudo.set_param('shift_planning.notification_advance_hours', self.notification_advance_hours)
         ICPSudo.set_param('shift_planning.reminder_hours', self.reminder_hours)
         ICPSudo.set_param('shift_planning.auto_mark_absent_hours', self.auto_mark_absent_hours)
@@ -128,3 +131,14 @@ class ShiftPlanningConfig(models.TransientModel):
         ICPSudo.set_param('shift_planning.default_report_period', self.default_report_period)
         ICPSudo.set_param('shift_planning.require_manager_approval', self.require_manager_approval)
         ICPSudo.set_param('shift_planning.enable_attendance_penalties', self.enable_attendance_penalties)
+        
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Configuración Guardada',
+                'message': 'Las configuraciones se guardaron correctamente.',
+                'type': 'success',
+                'sticky': False,
+            }
+        }

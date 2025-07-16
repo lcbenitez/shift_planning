@@ -1,205 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vista de Configuración -->
-    <record id="view_shift_planning_config_form" model="ir.ui.view">
-        <field name="name">shift.planning.config.form</field>
-        <field name="model">shift.planning.config</field>
-        <field name="arch" type="xml">
-            <form>
-                <sheet>
-                    <div class="row mt16 o_settings_container">
-                        <!-- Configuraciones de Notificaciones -->
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="notification_advance_hours"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="notification_advance_hours"/>
-                                <div class="text-muted">
-                                    Tiempo de anticipación para enviar notificaciones de turno
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="reminder_hours"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="reminder_hours"/>
-                                <div class="text-muted">
-                                    Horas antes del turno para enviar recordatorio
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="auto_mark_absent_hours"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="auto_mark_absent_hours"/>
-                                <div class="text-muted">
-                                    Horas después del inicio para marcar ausente automáticamente
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Configuraciones de Horarios -->
-                        <div class="col-12">
-                            <h2>Configuraciones de Horarios</h2>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="min_shift_duration"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="min_shift_duration"/>
-                                <div class="text-muted">
-                                    Duración mínima permitida para un turno
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="max_shift_duration"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="max_shift_duration"/>
-                                <div class="text-muted">
-                                    Duración máxima permitida para un turno
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="max_daily_hours"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="max_daily_hours"/>
-                                <div class="text-muted">
-                                    Máximo de horas diarias por empleado
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="min_rest_between_shifts"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="min_rest_between_shifts"/>
-                                <div class="text-muted">
-                                    Tiempo mínimo de descanso entre turnos
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Configuraciones de Asignación Automática -->
-                        <div class="col-12">
-                            <h2>Asignación Automática</h2>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="auto_assign_enabled"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="auto_assign_enabled"/>
-                                <div class="text-muted">
-                                    Habilitar asignación automática de empleados
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box" invisible="not auto_assign_enabled">
-                            <div class="o_setting_left_pane">
-                                <field name="prefer_skills_match"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="prefer_skills_match"/>
-                                <div class="text-muted">
-                                    Priorizar empleados con habilidades exactas
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box" invisible="not auto_assign_enabled">
-                            <div class="o_setting_left_pane">
-                                <field name="consider_employee_preferences"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="consider_employee_preferences"/>
-                                <div class="text-muted">
-                                    Considerar preferencias horarias de empleados
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Configuraciones de Reportes -->
-                        <div class="col-12">
-                            <h2>Reportes</h2>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="default_report_period"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="default_report_period"/>
-                                <div class="text-muted">
-                                    Período por defecto para los reportes
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Configuraciones de Aprobación -->
-                        <div class="col-12">
-                            <h2>Aprobaciones y Penalizaciones</h2>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="require_manager_approval"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="require_manager_approval"/>
-                                <div class="text-muted">
-                                    Requerir aprobación de gerente para turnos
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-12 col-lg-6 o_setting_box">
-                            <div class="o_setting_left_pane">
-                                <field name="enable_attendance_penalties"/>
-                            </div>
-                            <div class="o_setting_right_pane">
-                                <label for="enable_attendance_penalties"/>
-                                <div class="text-muted">
-                                    Aplicar penalizaciones por asistencia
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </sheet>
-            </form>
-        </field>
-    </record>
+	<!-- Vista de Configuración Simplificada -->
+	<record id="view_shift_planning_config_form" model="ir.ui.view">
+		<field name="name">shift.planning.config.form</field>
+		<field name="model">shift.planning.config</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_title">
+						<h1>Configuración de Turnos</h1>
+					</div>
 
-    <!-- Acción para configuración -->
-    <record id="action_shift_planning_config" model="ir.actions.act_window">
-        <field name="name">Configuración de Turnos</field>
-        <field name="res_model">shift.planning.config</field>
-        <field name="view_mode">form</field>
-        <field name="target">inline</field>
-    </record>
+					<group>
+						<group string="Notificaciones">
+							<field name="notification_advance_hours"/>
+							<field name="reminder_hours"/>
+							<field name="auto_mark_absent_hours"/>
+						</group>
 
-    <!-- Menú de configuración -->
-    <menuitem id="menu_shift_planning_config"
+						<group string="Límites de Horarios">
+							<field name="min_shift_duration"/>
+							<field name="max_shift_duration"/>
+							<field name="max_daily_hours"/>
+							<field name="min_rest_between_shifts"/>
+						</group>
+					</group>
+
+					<group>
+						<group string="Asignación Automática">
+							<field name="auto_assign_enabled"/>
+							<field name="prefer_skills_match"/>
+							<field name="consider_employee_preferences"/>
+						</group>
+
+						<group string="Otras Configuraciones">
+							<field name="default_report_period"/>
+							<field name="require_manager_approval"/>
+							<field name="enable_attendance_penalties"/>
+						</group>
+					</group>
+				</sheet>
+
+				<footer>
+					<button name="action_save_config" string="Guardar Configuración"
+                            type="object" class="btn-primary"/>
+					<button string="Cancelar" class="btn-secondary" special="cancel"/>
+				</footer>
+			</form>
+		</field>
+	</record>
+
+	<!-- Acción para configuración -->
+	<record id="action_shift_planning_config" model="ir.actions.act_window">
+		<field name="name">Configuración de Turnos</field>
+		<field name="res_model">shift.planning.config</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<!-- Menú de configuración -->
+	<menuitem id="menu_shift_planning_config"
               name="Configuración"
               parent="menu_shift_planning_root"
               action="action_shift_planning_config"
