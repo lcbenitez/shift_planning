@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<!-- Vista Tree (Lista) -->
+	<record id="view_work_role_tree" model="ir.ui.view">
+		<field name="name">work.role.tree</field>
+		<field name="model">work.role</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="description"/>
+				<field name="available_employees_count" string="Empleados Calificados"/>
+				<field name="active"/>
+			</tree>
+		</field>
+	</record>
+
+	<!-- Vista Form (Formulario) -->
+	<record id="view_work_role_form" model="ir.ui.view">
+		<field name="name">work.role.form</field>
+		<field name="model">work.role</field>
+		<field name="arch" type="xml">
+			<form>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<!-- Botón para ver empleados calificados -->
+						<button name="action_view_qualified_employees"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-users">
+							<div class="o_field_widget o_stat_info">
+								<span class="o_stat_value">
+									<field name="available_employees_count"/>
+								</span>
+								<span class="o_stat_text">Empleados Calificados</span>
+							</div>
+						</button>
+					</div>
+
+					<div class="oe_title">
+						<label for="name" class="oe_edit_only"/>
+						<h1>
+							<field name="name" placeholder="Ej: Mesero, Barista, Cocinero..."/>
+						</h1>
+					</div>
+
+					<group>
+						<group>
+							<field name="active"/>
+						</group>
+					</group>
+
+					<group string="Descripción">
+						<field name="description" nolabel="1"
+                               placeholder="Describe las responsabilidades y tareas de este rol..."/>
+					</group>
+
+					<group string="Habilidades Requeridas">
+						<field name="skill_ids" nolabel="1"
+                               widget="many2many_tags"
+                               placeholder="Selecciona las habilidades necesarias para este rol"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+	</record>
+
+	<!-- Acción del menú -->
+	<record id="action_work_role" model="ir.actions.act_window">
+		<field name="name">Roles de Trabajo</field>
+		<field name="res_model">work.role</field>
+		<field name="view_mode">tree,form</field>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+				¡Crea tu primer rol de trabajo!
+			</p>
+			<p>
+				Los roles definen las diferentes posiciones que pueden ocupar tus empleados.
+				Cada rol puede requerir habilidades específicas.
+			</p>
+		</field>
+	</record>
+
+	<!-- Menú -->
+	<menuitem id="menu_work_role"
+              name="Roles de Trabajo"
+              parent="menu_shift_planning_root"
+              action="action_work_role"
+              sequence="5"/>
+</odoo>
