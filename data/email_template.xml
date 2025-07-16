@@ -7,13 +7,13 @@
 		<field name="subject">Turno Asignado - {{ object.shift_date.strftime('%d/%m/%Y') }} - {{ object.shift_role }}</field>
 		<field name="email_to">{{ object.employee_email }}</field>
 		<field name="body_html" type="html">
-			<div style="margin: 0px; padding: 0px; font-family: 'Lucida Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 13px; color: rgb(34, 34, 34);">
+			<div style="margin: 0px; padding: 0px; font-family: Arial, sans-serif; font-size: 13px; color: rgb(34, 34, 34);">
 				<div style="background-color: #f8f9fa; padding: 20px;">
-					<div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+					<div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 8px; padding: 30px;">
 
 						<!-- Header -->
 						<div style="text-align: center; margin-bottom: 30px;">
-							<h1 style="color: #2c5282; margin: 0; font-size: 24px;">📅 Turno Asignado</h1>
+							<h1 style="color: #2c5282; margin: 0; font-size: 24px;">Turno Asignado</h1>
 							<p style="color: #666; margin: 5px 0 0 0;">Notificación de Asignación de Turno</p>
 						</div>
 
@@ -26,39 +26,31 @@
 							Se te ha asignado un turno con los siguientes detalles:
 						</p>
 
-						<!-- Shift Details Card -->
-						<div style="background-color: #f7fafc; border-left: 4px solid #4299e1; padding: 20px; margin: 20px 0; border-radius: 4px;">
+						<!-- Shift Details -->
+						<div style="background-color: #f7fafc; border-left: 4px solid #4299e1; padding: 20px; margin: 20px 0;">
 							<table style="width: 100%; border-collapse: collapse;">
 								<tr>
-									<td style="padding: 8px 0; width: 40%; color: #4a5568; font-weight: bold;">📅 Fecha:</td>
-									<td style="padding: 8px 0; color: #2d3748;">{{ object.shift_date.strftime('%A, %d de %B de %Y') }}</td>
+									<td style="padding: 8px 0; width: 40%; color: #4a5568; font-weight: bold;">Fecha:</td>
+									<td style="padding: 8px 0; color: #2d3748;">{{ object.shift_date.strftime('%d/%m/%Y') }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">🕐 Horario:</td>
+									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">Horario:</td>
 									<td style="padding: 8px 0; color: #2d3748;">{{ object.shift_hours }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">👔 Rol:</td>
+									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">Rol:</td>
 									<td style="padding: 8px 0; color: #2d3748;">{{ object.shift_role }}</td>
 								</tr>
 								<tr>
-									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">🏢 Sucursal:</td>
+									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">Sucursal:</td>
 									<td style="padding: 8px 0; color: #2d3748;">{{ object.branch_id.name }}</td>
-								</tr>
-								<tr>
-									<td style="padding: 8px 0; color: #4a5568; font-weight: bold;">📋 Estado:</td>
-									<td style="padding: 8px 0;">
-										<span style="background-color: #bee3f8; color: #2b6cb0; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold;">
-											{{ dict(object._fields['status'].selection)[object.status] }}
-										</span>
-									</td>
 								</tr>
 							</table>
 						</div>
 
 						<!-- Important Notes -->
 						<div style="background-color: #fef5e7; border: 1px solid #f6ad55; border-radius: 4px; padding: 15px; margin: 20px 0;">
-							<h3 style="color: #c05621; margin: 0 0 10px 0; font-size: 16px;">📌 Recordatorios Importantes:</h3>
+							<h3 style="color: #c05621; margin: 0 0 10px 0; font-size: 16px;">Recordatorios Importantes:</h3>
 							<ul style="margin: 0; padding-left: 20px; color: #744210;">
 								<li>Llega 10 minutos antes del inicio de tu turno</li>
 								<li>Confirma tu asistencia con tu supervisor</li>
@@ -66,21 +58,11 @@
 							</ul>
 						</div>
 
-						<!-- Action Needed -->
-						<div style="text-align: center; margin: 30px 0;">
-							<p style="margin-bottom: 15px; color: #4a5568;">
-								<strong>Por favor confirma la recepción de esta notificación</strong>
-							</p>
-						</div>
-
 						<!-- Footer -->
 						<div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
 							<p style="color: #718096; font-size: 14px; margin: 0;">
 								Este es un mensaje automático del Sistema de Gestión de Turnos.<br/>
 								Para cualquier consulta, contacta a tu supervisor.
-							</p>
-							<p style="color: #a0aec0; font-size: 12px; margin: 10px 0 0 0;">
-								Enviado el {{ ctx['datetime'].now().strftime('%d/%m/%Y a las %H:%M') }}
 							</p>
 						</div>
 
