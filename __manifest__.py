@@ -68,6 +68,7 @@
         # Nuevas vistas avanzadas
         'views/shift_config_view.xml',
         'views/employee_preferences_views.xml',
+        'views/auto_assign_wizard_views.xml',
         'views/shift_dashboard_view.xml',
         'views/shift_reports_views.xml',
     ],

@@ -47,12 +47,6 @@ class EmployeeShiftPreferences(models.Model):
         domain="[('is_company', '=', True)]"
     )
     
-    # Roles preferidos
-    preferred_role_ids = fields.Many2many(
-        'work.role',
-        string='Roles Preferidos'
-    )
-    
     # Configuraciones de disponibilidad
     max_hours_per_day = fields.Float(
         string='Máximo Horas por Día',
@@ -148,20 +142,6 @@ class EmployeeShiftPreferences(models.Model):
             
             record.current_week_hours = total_hours
 
-    def action_auto_assign_shifts(self):
-        """Acción para asignar turnos automáticamente basado en preferencias"""
-        return {
-            'name': 'Asignación Automática de Turnos',
-            'type': 'ir.actions.act_window',
-            'res_model': 'shift.auto.assign.wizard',
-            'view_mode': 'form',
-            'target': 'new',
-            'context': {
-                'default_employee_id': self.employee_id.id,
-                'default_use_preferences': True,
-            }
-        }
-
     def get_shift_preference_score(self, shift):
         """Calcular puntaje de preferencia para un turno específico"""
         score = 0
@@ -187,11 +167,6 @@ class EmployeeShiftPreferences(models.Model):
         
         # Verificar sucursal preferida
         if shift.branch_id in self.preferred_branch_ids:
-            score += 8
-        
-        # Verificar rol preferido
-        role_obj = self.env['work.role'].search([('name', '=', shift.role)], limit=1)
-        if role_obj and role_obj in self.preferred_role_ids:
             score += 8
         
         return score
