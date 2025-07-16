@@ -45,6 +45,12 @@
 						<group string="Sucursales Preferidas">
 							<field name="preferred_branch_ids" widget="many2many_tags"/>
 						</group>
+						<group string="Roles Preferidos">
+							<field name="preferred_role_ids" widget="many2many_tags"/>
+						</group>
+					</group>
+
+					<group>
 						<group string="Configuraciones">
 							<field name="available_for_urgent"/>
 							<field name="notification_advance_hours"/>
