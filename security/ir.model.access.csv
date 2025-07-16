@@ -1,5 +1,24 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+# Modelos base
 access_work_role_user,access_work_role_user,model_work_role,,1,1,1,1
 access_work_shift_schedule_user,access_work_shift_schedule_user,model_work_shift_schedule,,1,1,1,1
 access_work_shift_assignment_user,access_work_shift_assignment_user,model_work_shift_assignment,,1,1,1,1
 access_shift_branch_report_user,access_shift_branch_report_user,model_shift_branch_report,,1,1,1,1
+
+# Nuevos modelos avanzados
+access_shift_planning_config_user,access_shift_planning_config_user,model_shift_planning_config,,1,1,1,1
+access_employee_shift_preferences_user,access_employee_shift_preferences_user,model_employee_shift_preferences,,1,1,1,1
+access_shift_auto_assign_wizard_user,access_shift_auto_assign_wizard_user,model_shift_auto_assign_wizard,,1,1,1,1
+access_shift_dashboard_user,access_shift_dashboard_user,model_shift_dashboard,,1,0,0,0
+
+# Permisos específicos para managers
+access_work_role_manager,access_work_role_manager,model_work_role,base.group_system,1,1,1,1
+access_work_shift_schedule_manager,access_work_shift_schedule_manager,model_work_shift_schedule,base.group_system,1,1,1,1
+access_work_shift_assignment_manager,access_work_shift_assignment_manager,model_work_shift_assignment,base.group_system,1,1,1,1
+access_shift_planning_config_manager,access_shift_planning_config_manager,model_shift_planning_config,base.group_system,1,1,1,1
+access_employee_shift_preferences_manager,access_employee_shift_preferences_manager,model_employee_shift_preferences,base.group_system,1,1,1,1
+
+# Permisos de solo lectura para empleados
+access_work_shift_schedule_employee,access_work_shift_schedule_employee,model_work_shift_schedule,base.group_user,1,0,0,0
+access_work_shift_assignment_employee,access_work_shift_assignment_employee,model_work_shift_assignment,base.group_user,1,0,0,0
+access_employee_shift_preferences_employee,access_employee_shift_preferences_employee,model_employee_shift_preferences,base.group_user,1,1,1,0

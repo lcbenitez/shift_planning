@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista del Dashboard -->
+    <record id="view_shift_dashboard" model="ir.ui.view">
+        <field name="name">shift.dashboard</field>
+        <field name="model">shift.dashboard</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="o_dashboard">
+                        <!-- Título Principal -->
+                        <div class="row">
+                            <div class="col-12">
+                                <h1 class="mb-3">📊 Dashboard de Turnos</h1>
+                                <div class="alert alert-info" role="alert">
+                                    <strong>Resumen Ejecutivo:</strong> Vista general del sistema de turnos y asignaciones
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Métricas de Hoy -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3>📅 Métricas de Hoy</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-primary text-white">
+                                    <div class="card-body text-center">
+                                        <h2 class="card-title">
+                                            <i class="fa fa-calendar"></i>
+                                            <span id="today_shifts">0</span>
+                                        </h2>
+                                        <p class="card-text">Turnos Programados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h2 class="card-title">
+                                            <i class="fa fa-users"></i>
+                                            <span id="today_assignments">0</span>
+                                        </h2>
+                                        <p class="card-text">Empleados Asignados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h2 class="card-title">
+                                            <i class="fa fa-check-circle"></i>
+                                            <span id="today_present">0</span>
+                                        </h2>
+                                        <p class="card-text">Presentes</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <h2 class="card-title">
+                                            <i class="fa fa-clock-o"></i>
+                                            <span id="today_pending">0</span>
+                                        </h2>
+                                        <p class="card-text">Pendientes</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Métricas Semanales -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3>📊 Métricas Semanales</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Turnos Esta Semana</h5>
+                                        <h3 class="text-primary">
+                                            <span id="week_shifts">0</span>
+                                        </h3>
+                                        <p class="text-muted">Total programados</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Horas Trabajadas</h5>
+                                        <h3 class="text-success">
+                                            <span id="week_hours">0</span>
+                                        </h3>
+                                        <p class="text-muted">Horas totales</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Asistencia Semanal</h5>
+                                        <h3 class="text-info">
+                                            <span id="week_attendance">0</span>%
+                                        </h3>
+                                        <p class="text-muted">Tasa de asistencia</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Alertas y Notificaciones -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3>⚠️ Alertas y Notificaciones</h3>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-warning">
+                                            <i class="fa fa-exclamation-triangle"></i>
+                                            Turnos Incompletos
+                                        </h5>
+                                        <h3 id="incomplete_shifts">0</h3>
+                                        <p class="text-muted">Requieren asignación</p>
+                                        <button class="btn btn-sm btn-warning" onclick="viewIncompleteShifts()">
+                                            Ver Detalles
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-danger">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-danger">
+                                            <i class="fa fa-times-circle"></i>
+                                            Empleados Sin Email
+                                        </h5>
+                                        <h3 id="no_email_employees">0</h3>
+                                        <p class="text-muted">No pueden recibir notificaciones</p>
+                                        <button class="btn btn-sm btn-danger" onclick="viewEmployeesNoEmail()">
+                                            Ver Lista
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-info">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-info">
+                                            <i class="fa fa-refresh"></i>
+                                            Conflictos de Horario
+                                        </h5>
+                                        <h3 id="conflicting_assignments">0</h3>
+                                        <p class="text-muted">Asignaciones traslapadas</p>
+                                        <button class="btn btn-sm btn-info" onclick="viewConflicts()">
+                                            Resolver
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gráfico de Tendencia de Asistencia -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>📈 Tendencia de Asistencia (Últimos 7 días)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="attendanceChart" height="100"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Próximos Turnos -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>📅 Próximos Turnos</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="upcoming_shifts">
+                                            <div class="text-center">
+                                                <i class="fa fa-spinner fa-spin"></i>
+                                                Cargando...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>👥 Rendimiento de Empleados</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="employee_performance">
+                                            <div class="text-center">
+                                                <i class="fa fa-spinner fa-spin"></i>
+                                                Cargando...
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Acciones Rápidas -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h3>🚀 Acciones Rápidas</h3>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary btn-block" onclick="createNewShift()">
+                                    <i class="fa fa-plus"></i> Nuevo Turno
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-success btn-block" onclick="autoAssignShifts()">
+                                    <i class="fa fa-magic"></i> Asignación Automática
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-info btn-block" onclick="generateReport()">
+                                    <i class="fa fa-file-text"></i> Generar Reporte
+                                </button>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-warning btn-block" onclick="openConfiguration()">
+                                    <i class="fa fa-cog"></i> Configuración
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Script JavaScript para el Dashboard -->
+    <template id="shift_dashboard_assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript">
+                odoo.define('shift_planning.dashboard', function (require) {
+                    "use strict";
+
+                    var core = require('web.core');
+                    var Widget = require('web.Widget');
+                    var rpc = require('web.rpc');
+
+                    var ShiftDashboard = Widget.extend({
+                        template: 'shift_dashboard',
+                        
+                        start: function () {
+                            this._super.apply(this, arguments);
+                            this.loadDashboardData();
+                            this.loadChartData();
+                            this.loadUpcomingShifts();
+                            this.loadEmployeePerformance();
+                        },
+
+                        loadDashboardData: function () {
+                            var self = this;
+                            rpc.query({
+                                model: 'shift.dashboard',
+                                method: 'get_dashboard_data',
+                                args: []
+                            }).then(function (data) {
+                                self.updateDashboardMetrics(data);
+                            });
+                        },
+
+                        updateDashboardMetrics: function (data) {
+                            // Actualizar métricas de hoy
+                            $('#today_shifts').text(data.today.total_shifts);
+                            $('#today_assignments').text(data.today.total_assignments);
+                            $('#today_present').text(data.today.present_count);
+                            $('#today_pending').text(data.today.pending_count);
+
+                            // Actualizar métricas semanales
+                            $('#week_shifts').text(data.week.total_shifts);
+                            $('#week_hours').text(data.week.total_hours.toFixed(1));
+                            $('#week_attendance').text(data.week.attendance_rate.toFixed(1));
+
+                            // Actualizar alertas
+                            $('#incomplete_shifts').text(data.alerts.incomplete_shifts);
+                            $('#no_email_employees').text(data.alerts.no_email_employees);
+                            $('#conflicting_assignments').text(data.alerts.conflicting_assignments);
+                        },
+
+                        loadChartData: function () {
+                            var self = this;
+                            rpc.query({
+                                model: 'shift.dashboard',
+                                method: 'get_chart_data',
+                                args: []
+                            }).then(function (data) {
+                                self.renderAttendanceChart(data.attendance_trend);
+                            });
+                        },
+
+                        renderAttendanceChart: function (data) {
+                            var ctx = document.getElementById('attendanceChart').getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: data.dates,
+                                    datasets: [{
+                                        label: 'Asistencia %',
+                                        data: data.data,
+                                        borderColor: 'rgb(75, 192, 192)',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        tension: 0.1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            max: 100
+                                        }
+                                    }
+                                }
+                            });
+                        },
+
+                        loadUpcomingShifts: function () {
+                            var self = this;
+                            rpc.query({
+                                model: 'shift.dashboard',
+                                method: 'get_upcoming_shifts',
+                                args: [10]
+                            }).then(function (shifts) {
+                                self.renderUpcomingShifts(shifts);
+                            });
+                        },
+
+                        renderUpcomingShifts: function (shifts) {
+                            var html = '';
+                            if (shifts.length === 0) {
+                                html = '<p class="text-muted">No hay turnos próximos</p>';
+                            } else {
+                                shifts.forEach(function (shift) {
+                                    var statusClass = shift.is_complete ? 'success' : 'warning';
+                                    html += '<div class="border-bottom py-2">';
+                                    html += '<div class="d-flex justify-content-between">';
+                                    html += '<div>';
+                                    html += '<strong>' + shift.date + '</strong> ' + shift.time;
+                                    html += '<br><small class="text-muted">' + shift.role + ' - ' + shift.branch + '</small>';
+                                    html += '</div>';
+                                    html += '<div class="text-right">';
+                                    html += '<span class="badge badge-' + statusClass + '">';
+                                    html += shift.assigned + '/' + shift.required;
+                                    html += '</span>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                });
+                            }
+                            $('#upcoming_shifts').html(html);
+                        },
+
+                        loadEmployeePerformance: function () {
+                            var self = this;
+                            rpc.query({
+                                model: 'shift.dashboard',
+                                method: 'get_employee_performance',
+                                args: [10]
+                            }).then(function (performance) {
+                                self.renderEmployeePerformance(performance);
+                            });
+                        },
+
+                        renderEmployeePerformance: function (performance) {
+                            var html = '';
+                            if (performance.length === 0) {
+                                html = '<p class="text-muted">No hay datos de rendimiento</p>';
+                            } else {
+                                performance.forEach(function (emp, index) {
+                                    var medalClass = '';
+                                    if (index === 0) medalClass = 'text-warning'; // Oro
+                                    else if (index === 1) medalClass = 'text-secondary'; // Plata
+                                    else if (index === 2) medalClass = 'text-dark'; // Bronce
+                                    
+                                    html += '<div class="border-bottom py-2">';
+                                    html += '<div class="d-flex justify-content-between">';
+                                    html += '<div>';
+                                    html += '<i class="fa fa-trophy ' + medalClass + '"></i> ';
+                                    html += '<strong>' + emp.employee + '</strong>';
+                                    html += '<br><small class="text-muted">' + emp.total_shifts + ' turnos, ' + emp.total_hours.toFixed(1) + ' hrs</small>';
+                                    html += '</div>';
+                                    html += '<div class="text-right">';
+                                    html += '<span class="badge badge-success">';
+                                    html += emp.attendance_rate.toFixed(1) + '%';
+                                    html += '</span>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                });
+                            }
+                            $('#employee_performance').html(html);
+                        }
+                    });
+
+                    // Funciones globales para los botones
+                    window.viewIncompleteShifts = function () {
+                        // Implementar navegación a turnos incompletos
+                    };
+
+                    window.viewEmployeesNoEmail = function () {
+                        // Implementar vista de empleados sin email
+                    };
+
+                    window.viewConflicts = function () {
+                        // Implementar vista de conflictos
+                    };
+
+                    window.createNewShift = function () {
+                        // Implementar creación de turno
+                    };
+
+                    window.autoAssignShifts = function () {
+                        // Implementar asignación automática
+                    };
+
+                    window.generateReport = function () {
+                        // Implementar generación de reporte
+                    };
+
+                    window.openConfiguration = function () {
+                        // Implementar configuración
+                    };
+
+                    return ShiftDashboard;
+                });
+            </script>
+            
+            <!-- Cargar Chart.js -->
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+        </xpath>
+    </template>
+
+    <!-- Acción para el Dashboard -->
+    <record id="action_shift_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard de Turnos</field>
+        <field name="tag">shift_dashboard</field>
+    </record>
+
+    <!-- Menú principal que abre el dashboard -->
+    <record id="menu_shift_planning_root" model="ir.ui.menu">
+        <field name="name">Turnos</field>
+        <field name="action" ref="action_shift_dashboard"/>
+        <field name="sequence">10</field>
+    </record>
+</odoo>

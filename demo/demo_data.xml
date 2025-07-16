@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Habilidades Demo -->
+        <record id="skill_customer_service" model="hr.skill">
+            <field name="name">Servicio al Cliente</field>
+            <field name="skill_type_id" ref="hr_skills.hr_skill_type_soft"/>
+        </record>
+
+        <record id="skill_cooking" model="hr.skill">
+            <field name="name">Cocina</field>
+            <field name="skill_type_id" ref="hr_skills.hr_skill_type_technical"/>
+        </record>
+
+        <record id="skill_cashier" model="hr.skill">
+            <field name="name">Cajero</field>
+            <field name="skill_type_id" ref="hr_skills.hr_skill_type_technical"/>
+        </record>
+
+        <record id="skill_cleaning" model="hr.skill">
+            <field name="name">Limpieza</field>
+            <field name="skill_type_id" ref="hr_skills.hr_skill_type_technical"/>
+        </record>
+
+        <!-- Sucursales Demo -->
+        <record id="branch_centro" model="res.partner">
+            <field name="name">Sucursal Centro</field>
+            <field name="is_company">True</field>
+            <field name="supplier_rank">0</field>
+            <field name="customer_rank">0</field>
+            <field name="street">Calle Principal 123</field>
+            <field name="city">Ciudad Centro</field>
+        </record>
+
+        <record id="branch_norte" model="res.partner">
+            <field name="name">Sucursal Norte</field>
+            <field name="is_company">True</field>
+            <field name="supplier_rank">0</field>
+            <field name="customer_rank">0</field>
+            <field name="street">Avenida Norte 456</field>
+            <field name="city">Zona Norte</field>
+        </record>
+
+        <record id="branch_sur" model="res.partner">
+            <field name="name">Sucursal Sur</field>
+            <field name="is_company">True</field>
+            <field name="supplier_rank">0</field>
+            <field name="customer_rank">0</field>
+            <field name="street">Boulevard Sur 789</field>
+            <field name="city">Zona Sur</field>
+        </record>
+
+        <!-- Roles Demo -->
+        <record id="role_waiter" model="work.role">
+            <field name="name">Mesero</field>
+            <field name="description">Atender mesas, tomar órdenes y servir alimentos</field>
+            <field name="active">True</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_customer_service')])]"/>
+        </record>
+
+        <record id="role_chef" model="work.role">
+            <field name="name">Cocinero</field>
+            <field name="description">Preparar alimentos y mantener la cocina en orden</field>
+            <field name="active">True</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_cooking')])]"/>
+        </record>
+
+        <record id="role_cashier" model="work.role">
+            <field name="name">Cajero</field>
+            <field name="description">Manejar pagos y caja registradora</field>
+            <field name="active">True</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_cashier'), ref('skill_customer_service')])]"/>
+        </record>
+
+        <record id="role_cleaner" model="work.role">
+            <field name="name">Personal de Limpieza</field>
+            <field name="description">Mantener limpio el establecimiento</field>
+            <field name="active">True</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_cleaning')])]"/>
+        </record>
+
+        <!-- Empleados Demo -->
+        <record id="employee_juan" model="hr.employee">
+            <field name="name">Juan Pérez</field>
+            <field name="work_email">juan.perez@tuempresa.com</field>
+            <field name="work_phone">555-0101</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_customer_service'), ref('skill_cashier')])]"/>
+            <field name="active">True</field>
+        </record>
+
+        <record id="employee_maria" model="hr.employee">
+            <field name="name">María González</field>
+            <field name="work_email">maria.gonzalez@tuempresa.com</field>
+            <field name="work_phone">555-0102</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_cooking')])]"/>
+            <field name="active">True</field>
+        </record>
+
+        <record id="employee_carlos" model="hr.employee">
+            <field name="name">Carlos López</field>
+            <field name="work_email">carlos.lopez@tuempresa.com</field>
+            <field name="work_phone">555-0103</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_customer_service')])]"/>
+            <field name="active">True</field>
+        </record>
+
+        <record id="employee_ana" model="hr.employee">
+            <field name="name">Ana Martínez</field>
+            <field name="work_email">ana.martinez@tuempresa.com</field>
+            <field name="work_phone">555-0104</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_cleaning')])]"/>
+            <field name="active">True</field>
+        </record>
+
+        <record id="employee_luis" model="hr.employee">
+            <field name="name">Luis Rodríguez</field>
+            <field name="work_email">luis.rodriguez@tuempresa.com</field>
+            <field name="work_phone">555-0105</field>
+            <field name="skill_ids" eval="[(6, 0, [ref('skill_customer_service'), ref('skill_cooking')])]"/>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Preferencias de Empleados Demo -->
+        <record id="preferences_juan" model="employee.shift.preferences">
+            <field name="employee_id" ref="employee_juan"/>
+            <field name="preferred_morning">True</field>
+            <field name="preferred_afternoon">True</field>
+            <field name="preferred_night">False</field>
+            <field name="preferred_monday">True</field>
+            <field name="preferred_tuesday">True</field>
+            <field name="preferred_wednesday">True</field>
+            <field name="preferred_thursday">True</field>
+            <field name="preferred_friday">True</field>
+            <field name="preferred_saturday">False</field>
+            <field name="preferred_sunday">False</field>
+            <field name="preferred_branch_ids" eval="[(6, 0, [ref('branch_centro'), ref('branch_norte')])]"/>
+            <field name="preferred_role_ids" eval="[(6, 0, [ref('role_waiter'), ref('role_cashier')])]"/>
+            <field name="max_hours_per_day">8.0</field>
+            <field name="max_hours_per_week">40.0</field>
+            <field name="available_for_urgent">True</field>
+            <field name="notification_advance_hours">24</field>
+        </record>
+
+        <record id="preferences_maria" model="employee.shift.preferences">
+            <field name="employee_id" ref="employee_maria"/>
+            <field name="preferred_morning">True</field>
+            <field name="preferred_afternoon">True</field>
+            <field name="preferred_night">True</field>
+            <field name="preferred_monday">True</field>
+            <field name="preferred_tuesday">True</field>
+            <field name="preferred_wednesday">True</field>
+            <field name="preferred_thursday">True</field>
+            <field name="preferred_friday">True</field>
+            <field name="preferred_saturday">True</field>
+            <field name="preferred_sunday">False</field>
+            <field name="preferred_branch_ids" eval="[(6, 0, [ref('branch_centro')])]"/>
+            <field name="preferred_role_ids" eval="[(6, 0, [ref('role_chef')])]"/>
+            <field name="max_hours_per_day">10.0</field>
+            <field name="max_hours_per_week">50.0</field>
+            <field name="available_for_urgent">True</field>
+            <field name="notification_advance_hours">12</field>
+        </record>
+
+        <!-- Turnos Demo -->
+        <record id="shift_morning_waiter" model="work.shift.schedule">
+            <field name="date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="hour_start">8.0</field>
+            <field name="hour_end">16.0</field>
+            <field name="branch_id" ref="branch_centro"/>
+            <field name="role">Mesero</field>
+            <field name="quantity_required">2</field>
+            <field name="state">planned</field>
+        </record>
+
+        <record id="shift_afternoon_chef" model="work.shift.schedule">
+            <field name="date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="hour_start">14.0</field>
+            <field name="hour_end">22.0</field>
+            <field name="branch_id" ref="branch_centro"/>
+            <field name="role">Cocinero</field>
+            <field name="quantity_required">1</field>
+            <field name="state">planned</field>
+        </record>
+
+        <record id="shift_morning_cashier" model="work.shift.schedule">
+            <field name="date" eval="(datetime.now() + timedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="hour_start">9.0</field>
+            <field name="hour_end">17.0</field>
+            <field name="branch_id" ref="branch_norte"/>
+            <field name="role">Cajero</field>
+            <field name="quantity_required">1</field>
+            <field name="state">planned</field>
+        </record>
+
+        <record id="shift_cleaning_morning" model="work.shift.schedule">
+            <field name="date" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="hour_start">6.0</field>
+            <field name="hour_end">10.0</field>
+            <field name="branch_id" ref="branch_centro"/>
+            <field name="role">Personal de Limpieza</field>
+            <field name="quantity_required">1</field>
+            <field name="state">planned</field>
+        </record>
+
+        <!-- Asignaciones Demo -->
+        <record id="assignment_juan_waiter" model="work.shift.assignment">
+            <field name="shift_id" ref="shift_morning_waiter"/>
+            <field name="employee_id" ref="employee_juan"/>
+            <field name="status">confirmed</field>
+        </record>
+
+        <record id="assignment_maria_chef" model="work.shift.assignment">
+            <field name="shift_id" ref="shift_afternoon_chef"/>
+            <field name="employee_id" ref="employee_maria"/>
+            <field name="status">assigned</field>
+        </record>
+
+        <record id="assignment_ana_cleaning" model="work.shift.assignment">
+            <field name="shift_id" ref="shift_cleaning_morning"/>
+            <field name="employee_id" ref="employee_ana"/>
+            <field name="status">assigned</field>
+        </record>
+
+        <!-- Configuración Demo -->
+        <record id="demo_config_notification_hours" model="ir.config_parameter">
+            <field name="key">shift_planning.notification_advance_hours</field>
+            <field name="value">24</field>
+        </record>
+
+        <record id="demo_config_reminder_hours" model="ir.config_parameter">
+            <field name="key">shift_planning.reminder_hours</field>
+            <field name="value">2</field>
+        </record>
+
+        <record id="demo_config_auto_assign" model="ir.config_parameter">
+            <field name="key">shift_planning.auto_assign_enabled</field>
+            <field name="value">True</field>
+        </record>
+
+        <record id="demo_config_prefer_skills" model="ir.config_parameter">
+            <field name="key">shift_planning.prefer_skills_match</field>
+            <field name="value">True</field>
+        </record>
+
+        <record id="demo_config_max_daily_hours" model="ir.config_parameter">
+            <field name="key">shift_planning.max_daily_hours</field>
+            <field name="value">8.0</field>
+        </record>
+
+        <record id="demo_config_min_rest_hours" model="ir.config_parameter">
+            <field name="key">shift_planning.min_rest_between_shifts</field>
+            <field name="value">8.0</field>
+        </record>
+    </data>
+</odoo>
