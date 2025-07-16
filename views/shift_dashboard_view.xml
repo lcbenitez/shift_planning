@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<!-- Vista del Dashboard Simplificado -->
+	<!-- Vista del Dashboard Funcional -->
 	<record id="view_shift_dashboard" model="ir.ui.view">
 		<field name="name">shift.dashboard</field>
 		<field name="model">shift.dashboard</field>
@@ -11,83 +11,113 @@
 						<!-- Título Principal -->
 						<div class="row">
 							<div class="col-12">
-								<h1 class="mb-3">📊 Dashboard de Turnos</h1>
-								<div class="alert alert-info" role="alert">
-									<strong>Resumen Ejecutivo:</strong> Vista general del sistema de turnos y asignaciones
+								<h1 class="mb-3 text-primary">
+									<i class="fa fa-calendar"></i> Dashboard de Turnos
+								</h1>
+								<div class="alert alert-info mb-4" role="alert">
+									<i class="fa fa-info-circle"></i>
+									<strong>Sistema de Gestión de Turnos</strong> - Controla y programa turnos de trabajo
 								</div>
 							</div>
 						</div>
 
-						<!-- Métricas Básicas -->
-						<div class="row mb-4">
-							<div class="col-md-3">
-								<div class="card bg-primary text-white">
-									<div class="card-body text-center">
-										<h2 class="card-title">
-											<i class="fa fa-calendar"></i>
-											<span>--</span>
-										</h2>
-										<p class="card-text">Turnos Programados</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="card bg-success text-white">
-									<div class="card-body text-center">
-										<h2 class="card-title">
-											<i class="fa fa-users"></i>
-											<span>--</span>
-										</h2>
-										<p class="card-text">Empleados Asignados</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="card bg-info text-white">
-									<div class="card-body text-center">
-										<h2 class="card-title">
-											<i class="fa fa-check-circle"></i>
-											<span>--</span>
-										</h2>
-										<p class="card-text">Presentes</p>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="card bg-warning text-white">
-									<div class="card-body text-center">
-										<h2 class="card-title">
-											<i class="fa fa-clock-o"></i>
-											<span>--</span>
-										</h2>
-										<p class="card-text">Pendientes</p>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<!-- Acciones Rápidas -->
+						<!-- Acciones Principales -->
 						<div class="row mb-4">
 							<div class="col-12">
-								<h3>🚀 Acciones Rápidas</h3>
+								<h3 class="text-secondary mb-3">
+									<i class="fa fa-rocket"></i> Acciones Rápidas
+								</h3>
 							</div>
-							<div class="col-md-3">
-								<button class="btn btn-primary btn-block" type="object" name="action_new_shift">
-									<i class="fa fa-plus"></i> Nuevo Turno
+
+							<!-- Botón 1: Nuevo Turno -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-primary btn-lg btn-block"
+                                        type="object"
+                                        name="action_new_shift"
+                                        style="height: 80px;">
+									<i class="fa fa-plus fa-2x"></i>
+									<br/>
+									<strong>Nuevo Turno</strong>
 								</button>
 							</div>
-							<div class="col-md-3">
-								<button class="btn btn-success btn-block" type="object" name="action_auto_assign">
+
+							<!-- Botón 2: Ver Turnos -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-success btn-lg btn-block"
+                                        type="object"
+                                        name="action_view_shifts"
+                                        style="height: 80px;">
+									<i class="fa fa-calendar fa-2x"></i>
+									<br/>
+									<strong>Ver Turnos</strong>
+								</button>
+							</div>
+
+							<!-- Botón 3: Asignaciones -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-info btn-lg btn-block"
+                                        type="object"
+                                        name="action_view_assignments"
+                                        style="height: 80px;">
+									<i class="fa fa-users fa-2x"></i>
+									<br/>
+									<strong>Asignaciones</strong>
+								</button>
+							</div>
+
+							<!-- Botón 4: Empleados -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-warning btn-lg btn-block"
+                                        type="object"
+                                        name="action_view_employees"
+                                        style="height: 80px;">
+									<i class="fa fa-user fa-2x"></i>
+									<br/>
+									<strong>Empleados</strong>
+								</button>
+							</div>
+						</div>
+
+						<!-- Acciones Secundarias -->
+						<div class="row mb-4">
+							<div class="col-12">
+								<h4 class="text-secondary mb-3">
+									<i class="fa fa-cogs"></i> Funciones Adicionales
+								</h4>
+							</div>
+
+							<!-- Botón 5: Roles -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-secondary btn-block"
+                                        type="object"
+                                        name="action_view_roles">
+									<i class="fa fa-briefcase"></i> Roles de Trabajo
+								</button>
+							</div>
+
+							<!-- Botón 6: Asignación Automática -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-secondary btn-block"
+                                        type="object"
+                                        name="action_auto_assign">
 									<i class="fa fa-magic"></i> Asignación Automática
 								</button>
 							</div>
-							<div class="col-md-3">
-								<button class="btn btn-info btn-block" type="object" name="action_generate_report">
-									<i class="fa fa-file-text"></i> Generar Reporte
+
+							<!-- Botón 7: Reportes -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-secondary btn-block"
+                                        type="object"
+                                        name="action_generate_report">
+									<i class="fa fa-file-text"></i> Generar Reportes
 								</button>
 							</div>
-							<div class="col-md-3">
-								<button class="btn btn-warning btn-block" type="object" name="action_open_config">
+
+							<!-- Botón 8: Configuración -->
+							<div class="col-md-3 mb-2">
+								<button class="btn btn-secondary btn-block"
+                                        type="object"
+                                        name="action_open_config">
 									<i class="fa fa-cog"></i> Configuración
 								</button>
 							</div>
@@ -95,26 +125,55 @@
 
 						<!-- Información Útil -->
 						<div class="row">
-							<div class="col-md-6">
-								<div class="card">
-									<div class="card-header">
-										<h5>📋 Próximos Turnos</h5>
+							<div class="col-md-4">
+								<div class="card border-primary">
+									<div class="card-header bg-primary text-white">
+										<h5 class="mb-0">
+											<i class="fa fa-info-circle"></i> Primeros Pasos
+										</h5>
 									</div>
 									<div class="card-body">
-										<p class="text-muted">
-											Usa el menú "Programación Esperada" para ver los próximos turnos programados.
-										</p>
+										<ol class="mb-0">
+											<li>Crear roles de trabajo</li>
+											<li>Configurar empleados</li>
+											<li>Programar turnos</li>
+											<li>Asignar empleados a turnos</li>
+										</ol>
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6">
-								<div class="card">
-									<div class="card-header">
-										<h5>👥 Gestión de Empleados</h5>
+
+							<div class="col-md-4">
+								<div class="card border-success">
+									<div class="card-header bg-success text-white">
+										<h5 class="mb-0">
+											<i class="fa fa-check-circle"></i> Funcionalidades
+										</h5>
 									</div>
 									<div class="card-body">
-										<p class="text-muted">
-											Configura las preferencias de empleados para optimizar las asignaciones.
+										<ul class="mb-0">
+											<li>Gestión de turnos</li>
+											<li>Asignación de empleados</li>
+											<li>Control de asistencia</li>
+											<li>Notificaciones por email</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="card border-info">
+									<div class="card-header bg-info text-white">
+										<h5 class="mb-0">
+											<i class="fa fa-question-circle"></i> Ayuda
+										</h5>
+									</div>
+									<div class="card-body">
+										<p class="mb-2">
+											<strong>Menú Principal:</strong> Usa el menú "Turnos" para acceder a todas las funciones.
+										</p>
+										<p class="mb-0">
+											<strong>Soporte:</strong> Contacta al administrador del sistema para ayuda adicional.
 										</p>
 									</div>
 								</div>
